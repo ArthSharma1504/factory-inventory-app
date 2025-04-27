@@ -6,6 +6,8 @@ const productRoutes = require('../routes/productRoutes');
 const purchaseRoutes = require('../routes/purchaseRoutes');
 const departmentRoutes = require('../routes/departmentRoutes');
 const consumptionRoutes = require('../routes/consumptionRoutes');
+const authRoutes = require('../routes/authRoutes');
+const authMiddleware = require('../middleware/authMiddleware');
 
 dotenv.config();
 
@@ -25,10 +27,11 @@ mongoose.connect(process.env.MONGO_URI, {
   .catch((err) => console.error('MongoDB connection error:', err));
 
 // Routes
-app.use('/api/products', productRoutes);
-app.use('/api/purchases', purchaseRoutes);
-app.use('/api/departments', departmentRoutes);
-app.use('/api/consumptions', consumptionRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/products', authMiddleware, productRoutes);
+app.use('/api/purchases', authMiddleware, purchaseRoutes);
+app.use('/api/departments', authMiddleware, departmentRoutes);
+app.use('/api/consumptions', authMiddleware, consumptionRoutes);
 
 // Basic Route
 app.get('/', (req, res) => {

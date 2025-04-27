@@ -12,6 +12,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit }) => {
     unit: 'Liters',
     currentStock: 0,
   });
+  const [error, setError] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -20,20 +21,25 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
     try {
+      const token = localStorage.getItem('token');
       await axios.post('http://localhost:5000/api/products', {
         ...formData,
         currentStock: Number(formData.currentStock),
+      }, {
+        headers: { Authorization: `Bearer ${token}` },
       });
       onSubmit();
       setFormData({ name: '', category: 'Cleaning', unit: 'Liters', currentStock: 0 });
     } catch (error) {
-      console.error('Error creating product:', error);
+      setError('Error creating product');
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      {error && <p className="text-red-500">{error}</p>}
       <div>
         <label className="block text-sm font-medium text-gray-700">Name</label>
         <input

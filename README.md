@@ -46,10 +46,20 @@ Use a cloud MongoDB service (e.g., MongoDB Atlas) or run locally using Docker:do
 
 
 
+Environment Variables:
+
+Copy backend/.env.example to backend/.env and set MONGO_URI and JWT_SECRET.
+
+
 
 API Endpoints
 
-Products:
+Authentication:
+POST /api/auth/register: Register a new user
+POST /api/auth/login: Login and receive JWT
+
+
+Products (Authenticated):
 POST /api/products: Create a new product
 GET /api/products: Get all products
 GET /api/products/:id: Get a product by ID
@@ -57,13 +67,13 @@ PUT /api/products/:id: Update a product
 DELETE /api/products/:id: Delete a product
 
 
-Purchases:
+Purchases (Authenticated):
 POST /api/purchases: Create a new purchase
 GET /api/purchases: Get all purchases
 GET /api/purchases/:id: Get a purchase by ID
 
 
-Departments:
+Departments (Authenticated):
 POST /api/departments: Create a new department
 GET /api/departments: Get all departments
 GET /api/departments/:id: Get a department by ID
@@ -71,7 +81,7 @@ PUT /api/departments/:id: Update a department
 DELETE /api/departments/:id: Delete a department
 
 
-Consumptions:
+Consumptions (Authenticated):
 POST /api/consumptions: Create a new consumption
 GET /api/consumptions: Get all consumptions
 GET /api/consumptions/:id: Get a consumption by ID
@@ -81,7 +91,7 @@ GET /api/consumptions/:id: Get a consumption by ID
 Tech Stack
 
 Frontend: Next.js, React, Tailwind CSS
-Backend: Node.js, Express
+Backend: Node.js, Express, JWT
 Database: MongoDB
 Deployment: Vercel (frontend), Heroku (backend)
 
