@@ -4,6 +4,8 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const productRoutes = require('../routes/productRoutes');
 const purchaseRoutes = require('../routes/purchaseRoutes');
+const departmentRoutes = require('../routes/departmentRoutes');
+const consumptionRoutes = require('../routes/consumptionRoutes');
 
 dotenv.config();
 
@@ -25,6 +27,8 @@ mongoose.connect(process.env.MONGO_URI, {
 // Routes
 app.use('/api/products', productRoutes);
 app.use('/api/purchases', purchaseRoutes);
+app.use('/api/departments', departmentRoutes);
+app.use('/api/consumptions', consumptionRoutes);
 
 // Basic Route
 app.get('/', (req, res) => {

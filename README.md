@@ -63,6 +63,20 @@ GET /api/purchases: Get all purchases
 GET /api/purchases/:id: Get a purchase by ID
 
 
+Departments:
+POST /api/departments: Create a new department
+GET /api/departments: Get all departments
+GET /api/departments/:id: Get a department by ID
+PUT /api/departments/:id: Update a department
+DELETE /api/departments/:id: Delete a department
+
+
+Consumptions:
+POST /api/consumptions: Create a new consumption
+GET /api/consumptions: Get all consumptions
+GET /api/consumptions/:id: Get a consumption by ID
+
+
 
 Tech Stack
 
