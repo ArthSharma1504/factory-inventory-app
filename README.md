@@ -14,6 +14,7 @@ factory-inventory-app/
 │   ├── models/            # MongoDB schemas
 │   ├── controllers/       # Business logic
 │   ├── middleware/        # Custom middleware
+│   ├── tests/             # Backend tests
 │   ├── package.json       # Backend dependencies
 │   └── ...
 ├── .gitignore             # Git ignore file
@@ -48,7 +49,7 @@ Use a cloud MongoDB service (e.g., MongoDB Atlas) or run locally using Docker:do
 
 Environment Variables:
 
-Copy backend/.env.example to backend/.env and set MONGO_URI and JWT_SECRET.
+Copy backend/.env.example to backend/.env and set MONGO_URI, JWT_SECRET, and FRONTEND_URL.
 
 
 
@@ -88,11 +89,34 @@ GET /api/consumptions/:id: Get a consumption by ID
 
 
 
+Testing
+
+Run backend tests:cd backend
+npm test
+
+
+
+Deployment
+
+Frontend (Vercel):
+Install Vercel CLI: npm install -g vercel
+Deploy: cd frontend && vercel
+Set NEXT_PUBLIC_API_URL in Vercel to the backend URL.
+
+
+Backend (Heroku):
+Install Heroku CLI
+Deploy: cd backend && heroku create && git subtree push --prefix backend heroku main
+Set MONGO_URI, JWT_SECRET, and FRONTEND_URL in Heroku config vars.
+
+
+
 Tech Stack
 
-Frontend: Next.js, React, Tailwind CSS
+Frontend: Next.js, React, Tailwind CSS, react-toastify
 Backend: Node.js, Express, JWT
 Database: MongoDB
+Testing: Jest, Supertest
 Deployment: Vercel (frontend), Heroku (backend)
 
 Contributing

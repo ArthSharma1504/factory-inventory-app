@@ -1,12 +1,19 @@
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation'; // Use next/navigation if App Router, otherwise keep next/router
 
 const NavBar: React.FC = () => {
   const router = useRouter();
-  const isLoggedIn = typeof window !== 'undefined' && !!localStorage.getItem('token');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    setIsLoggedIn(false);
     router.push('/login');
   };
 

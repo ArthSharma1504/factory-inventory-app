@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 interface PurchaseFormProps {
   onSubmit: () => void;
@@ -19,18 +20,20 @@ const PurchaseForm: React.FC<PurchaseFormProps> = ({ onSubmit }) => {
     supplier: '',
     cost: 0,
   });
-  const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/products');
+        const token = localStorage.getItem('token');
+        const response = await axios.get('http://localhost:5000/api/products', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setProducts(response.data);
         if (response.data.length > 0) {
           setFormData((prev) => ({ ...prev, productId: response.data[0]._id }));
         }
       } catch (error) {
-        setError('Failed to load products');
+        toast.error('Failed to load products');
       }
     };
     fetchProducts();
@@ -38,18 +41,22 @@ const PurchaseForm: React.FC<PurchaseFormProps> = ({ onSubmit }) => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prev) => ({
+      ...prev,
+      [name]: name === 'quantity' || name === 'cost' ? Number(value) : value,
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
     try {
+      const token = localStorage.getItem('token');
       await axios.post('http://localhost:5000/api/purchases', {
         ...formData,
-        quantity: Number(formData.quantity),
-        cost: Number(formData.cost),
+      }, {
+        headers: { Authorization: `Bearer ${token}` },
       });
+      toast.success('Purchase added successfully!');
       onSubmit();
       setFormData({
         productId: products[0]?._id || '',
@@ -59,20 +66,19 @@ const PurchaseForm: React.FC<PurchaseFormProps> = ({ onSubmit }) => {
         cost: 0,
       });
     } catch (error) {
-      setError('Error creating purchase');
+      toast.error('Error creating purchase');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      {error && <p className="text-red-500">{error}</p>}
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Product</label>
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="flex flex-col">
+        <label className="text-sm font-medium text-gray-700 mb-1">Product</label>
         <select
           name="productId"
           value={formData.productId}
           onChange={handleChange}
-          className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+          className="border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
           required
         >
           {products.map((product) => (
@@ -82,47 +88,47 @@ const PurchaseForm: React.FC<PurchaseFormProps> = ({ onSubmit }) => {
           ))}
         </select>
       </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Quantity</label>
+      <div className="flex flex-col">
+        <label className="text-sm font-medium text-gray-700 mb-1">Quantity</label>
         <input
           type="number"
           name="quantity"
-          value={formData.quantity}
+          value={formData.quantity.toString()}
           onChange={handleChange}
-          className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+          className="border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
           required
           min="1"
         />
       </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Purchase Date</label>
+      <div className="flex flex-col">
+        <label className="text-sm font-medium text-gray-700 mb-1">Purchase Date</label>
         <input
           type="date"
           name="purchaseDate"
           value={formData.purchaseDate}
           onChange={handleChange}
-          className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+          className="border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
           required
         />
       </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Supplier</label>
+      <div className="flex flex-col">
+        <label className="text-sm font-medium text-gray-700 mb-1">Supplier</label>
         <input
           type="text"
           name="supplier"
           value={formData.supplier}
           onChange={handleChange}
-          className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+          className="border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
         />
       </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Cost</label>
+      <div className="flex flex-col">
+        <label className="text-sm font-medium text-gray-700 mb-1">Cost</label>
         <input
           type="number"
           name="cost"
-          value={formData.cost}
+          value={formData.cost.toString()}
           onChange={handleChange}
-          className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+          className="border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
           required
           min="0"
           step="0.01"
@@ -130,7 +136,7 @@ const PurchaseForm: React.FC<PurchaseFormProps> = ({ onSubmit }) => {
       </div>
       <button
         type="submit"
-        className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+        className="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700"
       >
         Add Purchase
       </button>

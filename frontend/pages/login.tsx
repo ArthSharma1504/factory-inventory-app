@@ -1,16 +1,23 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import NavBar from '../components/NavBar';
+import dynamic from 'next/dynamic';
+
+const NavBar = dynamic(() => import('../components/NavBar'), { ssr: false });
 
 const LoginPage: React.FC = () => {
   const [formData, setFormData] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
+  const [isClient, setIsClient] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -18,12 +25,16 @@ const LoginPage: React.FC = () => {
     setError('');
     try {
       const response = await axios.post('http://localhost:5000/api/auth/login', formData);
-      localStorage.setItem('token', response.data.token);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('token', response.data.token);
+      }
       router.push('/products');
-    } catch (error) {
+    } catch (err) {
       setError('Invalid credentials');
     }
   };
+
+  if (!isClient) return null;
 
   return (
     <div className="min-h-screen bg-gray-100">
