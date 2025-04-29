@@ -51,9 +51,7 @@ const PurchaseForm: React.FC<PurchaseFormProps> = ({ onSubmit }) => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      await axios.post('http://localhost:5000/api/purchases', {
-        ...formData,
-      }, {
+      await axios.post('http://localhost:5000/api/purchases', formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success('Purchase added successfully!');
@@ -71,14 +69,14 @@ const PurchaseForm: React.FC<PurchaseFormProps> = ({ onSubmit }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-lg shadow-md">
       <div className="flex flex-col">
         <label className="text-sm font-medium text-gray-700 mb-1">Product</label>
         <select
           name="productId"
           value={formData.productId}
           onChange={handleChange}
-          className="border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          className="border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"
           required
         >
           {products.map((product) => (
@@ -95,7 +93,7 @@ const PurchaseForm: React.FC<PurchaseFormProps> = ({ onSubmit }) => {
           name="quantity"
           value={formData.quantity.toString()}
           onChange={handleChange}
-          className="border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          className="border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"
           required
           min="1"
         />
@@ -107,7 +105,7 @@ const PurchaseForm: React.FC<PurchaseFormProps> = ({ onSubmit }) => {
           name="purchaseDate"
           value={formData.purchaseDate}
           onChange={handleChange}
-          className="border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          className="border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"
           required
         />
       </div>
@@ -118,7 +116,7 @@ const PurchaseForm: React.FC<PurchaseFormProps> = ({ onSubmit }) => {
           name="supplier"
           value={formData.supplier}
           onChange={handleChange}
-          className="border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          className="border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"
         />
       </div>
       <div className="flex flex-col">
@@ -128,7 +126,7 @@ const PurchaseForm: React.FC<PurchaseFormProps> = ({ onSubmit }) => {
           name="cost"
           value={formData.cost.toString()}
           onChange={handleChange}
-          className="border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          className="border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"
           required
           min="0"
           step="0.01"
@@ -136,7 +134,7 @@ const PurchaseForm: React.FC<PurchaseFormProps> = ({ onSubmit }) => {
       </div>
       <button
         type="submit"
-        className="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700"
+        className="bg-primary text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
       >
         Add Purchase
       </button>

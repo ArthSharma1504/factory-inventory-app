@@ -37,37 +37,37 @@ const LoginPage: React.FC = () => {
   if (!isClient) return null;
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
       <NavBar />
-      <div className="container mx-auto p-4 max-w-md">
-        <h1 className="text-3xl font-bold mb-4">Login</h1>
+      <div className="absolute top-20 w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
+        <h1 className="text-2xl font-bold text-secondary mb-6">Login</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
-          {error && <p className="text-red-500">{error}</p>}
+          {error && <p className="text-danger text-sm">{error}</p>}
           <div>
-            <label className="block text-sm font-medium text-gray-700">Username</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Username</label>
             <input
               type="text"
               name="username"
               value={formData.username}
               onChange={handleChange}
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+              className="border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Password</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
             <input
               type="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+              className="border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"
               required
             />
           </div>
           <button
             type="submit"
-            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+            className="w-full bg-primary text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
           >
             Login
           </button>
